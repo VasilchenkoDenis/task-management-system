@@ -1,9 +1,8 @@
 package com.denisvasilchenko.tms.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class Task {
@@ -12,10 +11,17 @@ public class Task {
     private int id;
     private String title;
     private String description;
-    private TaskStatus status;
-    private Priority priority;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus taskStatuses;
+    @ElementCollection(targetClass = Priority.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "task_priority", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "priority")
+    private Set<Priority> priority;
     private String comment;
+    @ManyToOne
     private User author;
-    private User performer;
+    @ManyToOne
+    private User assignee;
 
 }
