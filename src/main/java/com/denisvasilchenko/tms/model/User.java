@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name="users", uniqueConstraints = @UniqueConstraint(columnNames = {"userName", "email"}))
 @Table(name="users")
 public class User implements UserDetails {
     @Id
