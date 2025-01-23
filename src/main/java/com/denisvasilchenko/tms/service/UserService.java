@@ -4,6 +4,8 @@ import com.denisvasilchenko.tms.model.User;
 import com.denisvasilchenko.tms.model.UserRole;
 import com.denisvasilchenko.tms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +21,14 @@ public class UserService {
 
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+//    public List<User> findAll() {
+//        return userRepository.findAll();
+//    }
+
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public User create (User user) {
@@ -47,16 +57,16 @@ public class UserService {
 
 
     public User getCurrentUser() {
-        var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getByUsername(username);
+        var userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByEmail(userEmail);
     }
 
     @Deprecated
-    public void getAdmin (){
+    public User getAdmin (){
         var user = getCurrentUser();
         Set<UserRole> userRoles = user.getRoles();
         userRoles.add(UserRole.ROLE_ADMIN);
         user.setRoles(userRoles);
-        save(user);
+        return save(user);
     }
 }
