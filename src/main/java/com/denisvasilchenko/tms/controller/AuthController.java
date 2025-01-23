@@ -1,9 +1,9 @@
 package com.denisvasilchenko.tms.controller;
 
-import com.denisvasilchenko.tms.dto.JwtAuthenticationResponse;
-import com.denisvasilchenko.tms.dto.SignInRequest;
-import com.denisvasilchenko.tms.dto.SignUpRequest;
-import com.denisvasilchenko.tms.service.AuthenticationService;
+import com.denisvasilchenko.tms.security.dto.JwtAuthenticationResponse;
+import com.denisvasilchenko.tms.security.dto.SignInRequest;
+import com.denisvasilchenko.tms.security.dto.SignUpRequest;
+import com.denisvasilchenko.tms.security.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
