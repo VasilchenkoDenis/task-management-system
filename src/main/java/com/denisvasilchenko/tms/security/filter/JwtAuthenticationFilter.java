@@ -1,6 +1,6 @@
-package com.denisvasilchenko.tms.filter;
+package com.denisvasilchenko.tms.security.filter;
 
-import com.denisvasilchenko.tms.service.JwtService;
+import com.denisvasilchenko.tms.security.service.JwtService;
 import com.denisvasilchenko.tms.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

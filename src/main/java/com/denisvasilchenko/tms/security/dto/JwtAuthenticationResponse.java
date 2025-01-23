@@ -1,4 +1,4 @@
-package com.denisvasilchenko.tms.dto;
+package com.denisvasilchenko.tms.security.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

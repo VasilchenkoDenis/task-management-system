@@ -1,4 +1,4 @@
-package com.denisvasilchenko.tms.service;
+package com.denisvasilchenko.tms.security.service;
 
 
 import com.denisvasilchenko.tms.model.User;

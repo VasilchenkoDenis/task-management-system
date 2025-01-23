@@ -1,10 +1,11 @@
-package com.denisvasilchenko.tms.service;
+package com.denisvasilchenko.tms.security.service;
 
-import com.denisvasilchenko.tms.dto.JwtAuthenticationResponse;
-import com.denisvasilchenko.tms.dto.SignInRequest;
-import com.denisvasilchenko.tms.dto.SignUpRequest;
+import com.denisvasilchenko.tms.security.dto.JwtAuthenticationResponse;
+import com.denisvasilchenko.tms.security.dto.SignInRequest;
+import com.denisvasilchenko.tms.security.dto.SignUpRequest;
 import com.denisvasilchenko.tms.model.User;
 import com.denisvasilchenko.tms.model.UserRole;
+import com.denisvasilchenko.tms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
