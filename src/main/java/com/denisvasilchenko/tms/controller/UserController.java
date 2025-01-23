@@ -1,8 +1,8 @@
 package com.denisvasilchenko.tms.controller;
 
 
+import com.denisvasilchenko.tms.dto.EntityMapper;
 import com.denisvasilchenko.tms.dto.user.UserResponse;
-import com.denisvasilchenko.tms.dto.user.UserResponseConverter;
 import com.denisvasilchenko.tms.model.User;
 import com.denisvasilchenko.tms.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private UserResponseConverter userResponseConverter;
+    private EntityMapper entityMapper;
 
 
     @GetMapping()
@@ -42,8 +42,7 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage = userService.findAll(pageable);
-        Page<UserResponse> users = userPage.map(userResponseConverter::convertToResponse);
-
+        Page<UserResponse> users = userPage.map(user -> entityMapper.userToResponse(user));
         return ResponseEntity.ok(users);
     }
 }
