@@ -20,7 +20,6 @@ import java.util.function.Function;
 public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
-    private long expirationTime = 1000*60*60;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,10 +36,11 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        long expirationTime = 1000 * 60 * 60;
         return Jwts.builder().claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()+expirationTime))
+                .expiration(new Date(System.currentTimeMillis()+ expirationTime))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
