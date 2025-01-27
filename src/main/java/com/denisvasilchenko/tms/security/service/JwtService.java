@@ -20,8 +20,9 @@ import java.util.function.Function;
 public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
+    private long expirationTime = 1000*60*60;
 
-    public String extractEmail(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -32,11 +33,20 @@ public class JwtService {
             claims.put("email", customUserDetails.getEmail());
             claims.put("role", customUserDetails.getRoles());
         }
-        return generateToken(claims, userDetails);
+        return createToken(claims, userDetails);
+    }
+
+    private String createToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts.builder().claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()+expirationTime))
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
+                .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);
+        final String email = extractUsername(token);
         return (email.equals(userDetails.getUsername())&& !isTokenExpired(token));
 
     }
@@ -49,19 +59,15 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().claims(extraClaims)
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis()*10000*60*24))
-                .signWith(getSigningKey(), Jwts.SIG.HS256)
-                .compact();
-    }
 
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public String extractEmail (String token){
+        return extractClaim(token, claim -> claim.get("email", String.class));
     }
 
     private Claims extractAllClaims(String token) {
