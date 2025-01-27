@@ -25,7 +25,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserService userService;
-//    private final AuthenticationService authenticationService;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
