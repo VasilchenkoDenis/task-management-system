@@ -8,6 +8,7 @@ import com.denisvasilchenko.tms.model.UserRole;
 import com.denisvasilchenko.tms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,17 @@ public class AuthenticationService {
         return new JwtAuthenticationResponse(jwt);
     }
 
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()));
+    public JwtAuthenticationResponse signIn(SignInRequest request){
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    request.getEmail(),
+                    request.getPassword()));
+        }
+        catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
 
-
-
+        System.out.println("auth service");
         var user = userService.userDetailsService()
                 .loadUserByUsername(request.getEmail());
 
