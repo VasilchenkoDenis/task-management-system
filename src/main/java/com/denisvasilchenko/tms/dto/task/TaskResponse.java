@@ -17,14 +17,30 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(name = "Task Response")
+@Schema(name = "Task Response", description = "Response object for task details")
 public class TaskResponse {
+
+    @Schema(description = "Unique identifier of the task", example = "1")
     private long id;
+
+    @Schema(description = "Title of the task", example = "Fix bug")
     private String title;
+
+    @Schema(description = "Detailed description of the task", example = "This task involves fixing a critical bug in the application.")
     private String description;
+
+    @Schema(description = "Current status of the task", example = "IN_PROGRESS")
     private TaskStatus taskStatus;
+
+    @Schema(description = "Priority level of the task", example = "HIGH")
     private Priority priority;
+
+    @Schema(description = "Details of the user who created the task")
     private UserResponse author;
+
+    @Schema(description = "Details of the user assigned to the task")
     private UserResponse assignee;
+
+    @Schema(description = "List of comments associated with the task")
     private List<CommentResponse> comments = new ArrayList<>();
 }
