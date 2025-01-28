@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Аутентификация")
 public class ExampleController {
-    private final UserService service;
+    @Autowired
+    private UserService service;
 
     @Autowired
     private EntityMapper entityMapper;
