@@ -39,7 +39,7 @@ public class Task {
     @Schema(description = "User  assigned to the task")
     private User assignee;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "task_id")
     @Schema(description = "List of comments associated with the task")
     private List<Comment> comments = new ArrayList<>();
 
