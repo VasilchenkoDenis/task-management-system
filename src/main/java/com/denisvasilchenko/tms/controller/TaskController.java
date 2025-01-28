@@ -62,18 +62,18 @@ public class TaskController {
             @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
     })
     public ResponseEntity<Page<TaskResponse>> getTasks(
-            @Parameter(description = "Username of the task author", example = "PetrovDA")
+            @Parameter(description = "Username of the task author", example = "Example username")
             @RequestParam(required = false) String authorUsername,
-            @Parameter(description = "Email of the task author", example = "user@gmail.com")
+            @Parameter(description = "Email of the task author", example = "user@mail.example")
             @RequestParam(required = false) String authorEmail,
-            @Parameter(description = "Username assigned", example = "IvanovDV")
+            @Parameter(description = "Username assigned", example = "Example username2")
             @RequestParam(required = false) String assigneeUsername,
-            @Parameter(description = "Email assigned", example = "user@gmail.com")
+            @Parameter(description = "Email assigned", example = "user2@mail.example")
             @RequestParam(required = false) String assigneeEmail,
-            @Parameter(description = "Task title", example = "Fix bug")
+            @Parameter(description = "Task title", example = "Example title text")
             @RequestParam(required = false) String title,
-            @Parameter(description = "Task status", example = "IN_PROGRESS")
-            @RequestParam(required = false) TaskStatus status,
+            @Parameter(description = "Task status", example = "PENDING")
+            @RequestParam(required = false) TaskStatus taskStatus,
             @Parameter(description = "Task priority", example = "HIGH")
             @RequestParam(required = false) Priority priority,
             @Parameter(description = "Page number for pagination", example = "0")
@@ -85,7 +85,7 @@ public class TaskController {
         Specification<Task> taskSpecification = TaskSpecification.
                 filterByCriteria(authorUsername, authorEmail,
                         assigneeUsername, assigneeEmail, title,
-                        status, priority);
+                        taskStatus, priority);
 
         Page<TaskResponse> tasks = taskService.findAll(taskSpecification, pageable);
         return ResponseEntity.ok(tasks);
@@ -100,7 +100,7 @@ public class TaskController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest taskRequest) {
-        Task task = entityMapper.requestToTask(taskRequest);
+        Task task = entityMapper.requestToTask(taskRequest, userService);
         TaskResponse response = entityMapper.taskToResponse(taskService.save(task));
         return ResponseEntity.ok(response);
     }
@@ -117,7 +117,7 @@ public class TaskController {
     public ResponseEntity<TaskResponse> updateTask(@RequestBody TaskRequest taskRequest) {
 
         TaskResponse response = entityMapper.taskToResponse(taskService
-                .update(entityMapper.requestToTask(taskRequest)));
+                .update(entityMapper.requestToTask(taskRequest, userService)));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
