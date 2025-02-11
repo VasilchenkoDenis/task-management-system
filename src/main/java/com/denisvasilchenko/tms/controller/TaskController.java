@@ -30,7 +30,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @Data
 @RestController
 @Validated
@@ -92,13 +91,35 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTask(@PathVariable @Min(1) Long id) {
+    @Operation(summary = "Get task by ID",
+            description = "Returns a single task with the specified ID ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Task received successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(ref = "#/components/schemas/taskResponseSchema"))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized / Invalid Token", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Tasks not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
+    })
+    public ResponseEntity<TaskResponse> getTask(
+            @Parameter(description = "Task ID", example = "1")
+            @PathVariable @Min(1) Long id) {
         TaskResponse taskResponse = entityMapper.taskToResponse(taskService.findById(id));
         return new ResponseEntity<>(taskResponse, HttpStatus.OK);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Allows to create a new task",
+            description = "Returns the created task with the assigned ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Task created successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(ref = "#/components/schemas/taskResponseSchema"))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized / Invalid Token", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Tasks not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
+    })
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest taskRequest) {
         Task task = entityMapper.requestToTask(taskRequest, userService);
         TaskResponse response = entityMapper.taskToResponse(taskService.save(task));
@@ -107,6 +128,12 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Deletes a task",
+            description = "Deletes the task with the specified ID and returns a success status.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Task not found")
+    })
     public ResponseEntity<TaskResponse> deleteTask(@PathVariable @Min(1) Long id) {
         taskService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -114,6 +141,16 @@ public class TaskController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update a task",
+            description = "Update a task with specified ID and return updated task")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Task updated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(ref = "#/components/schemas/taskResponseSchema"))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized / Invalid Token", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Tasks not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error", content = @Content)
+    })
     public ResponseEntity<TaskResponse> updateTask(@RequestBody TaskRequest taskRequest) {
 
         TaskResponse response = entityMapper.taskToResponse(taskService
