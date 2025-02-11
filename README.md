@@ -23,7 +23,7 @@ Task Management System (API) — это простая система управ
 Java 17+,
 Spring Boot,
 Spring Security,
-Spring Data,
+Spring Dat,
 PostgreSQL,
 Docker Compose,
 Swagger                        
