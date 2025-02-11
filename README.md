@@ -20,9 +20,10 @@ Task Management System (API) — это простая система управ
       - Swagger UI для удобного взаимодействия с API.
 
 Технологии:
-Java 17+
-Spring Boot
-Spring Security
-PostgreSQL
-Docker Compose
+Java 17+,
+Spring Boot,
+Spring Security,
+Spring Data,
+PostgreSQL,
+Docker Compose,
 Swagger                        
